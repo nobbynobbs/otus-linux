@@ -83,12 +83,13 @@ Vagrant.configure("2") do |config|
         done
 
         # create fs and mount partitions
-        for i in $(seq 1 5)
-          do mkfs.xfs -q /dev/md0p$i
-        done
         mkdir -p /raid/part{1,2,3,4,5}
-        for i in $(seq 1 5); do mount /dev/md0p$i /raid/part$i; done
-        
+        for i in $(seq 1 5)
+          do
+            mkfs.xfs -q /dev/md0p$i
+            echo "/dev/md0p$i  /raid/part$i  xfs  defaults  0  2" >> /etc/fstab
+        done
+        mount -a
         echo "Provisioning complete!"
       SHELL
     end
